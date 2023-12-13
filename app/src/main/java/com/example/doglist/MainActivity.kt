@@ -1,5 +1,6 @@
 package com.example.doglist
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
@@ -30,7 +31,11 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
     }
 
     private fun initRecyclerView() {
-        adapter = DogAdapter(dogImages)
+        adapter = DogAdapter(dogImages) { imageUrl ->
+            val intent = Intent(this@MainActivity, DatosPerrosActivity::class.java)
+            intent.putExtra("image_url", imageUrl)
+            startActivity(intent)
+        }
         binding.rvDogs.layoutManager = LinearLayoutManager(this)
         binding.rvDogs.adapter = adapter
     }
