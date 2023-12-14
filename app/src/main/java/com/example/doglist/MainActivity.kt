@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
         binding.rvDogs.adapter = adapter
     }
 
-    //creamos una instancia del objeto retroFit
     private fun getRetroFit():Retrofit{
         return Retrofit.Builder()
             .baseUrl("https://dog.ceo/api/breed/")
@@ -49,19 +48,16 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
     }
 
     private fun searchByName(query:String){
-        //hago una corrutina
         CoroutineScope(Dispatchers.IO).launch {
             val call:Response<DogsResponse> = getRetroFit().create(APIService::class.java).getDogsByBreeds("$query/images")
             val puppies:DogsResponse? = call.body()
             runOnUiThread{
                 if(call.isSuccessful){
-                    //muestro recyclerView
                     val images:List<String> = puppies?.images ?: emptyList()
                     dogImages.clear()
                     dogImages.addAll(images)
                     adapter.notifyDataSetChanged()
                 }else{
-                    //muestro un error
                     showError()
                 }
                 hideKeyboard()
